@@ -1,8 +1,13 @@
+import { Button } from "@/components/ui/button";
+
 const SignupForm = () => {
   return (
-    <main className='flex h-screen'>
-      
-    </main>
+    <div>
+      <h1>Sign up</h1>
+      <Button type="submit">
+        Sign up
+      </Button>
+    </div>
   );
 }
 
