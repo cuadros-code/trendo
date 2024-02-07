@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { SingupValidation } from "@/lib/validation"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import Loader from "@/components/shared/Loader"
+import { createUserAccount } from "@/lib/appwrite/api"
 
 const SignupForm = () => {
 
@@ -22,8 +23,9 @@ const SignupForm = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof SingupValidation>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof SingupValidation>) {
+    const newUser = await createUserAccount(values);
+    console.log(newUser);
   }
 
   return (
