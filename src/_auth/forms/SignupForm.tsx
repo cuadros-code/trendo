@@ -25,6 +25,7 @@ const SignupForm = () => {
 
   async function onSubmit(values: z.infer<typeof SingupValidation>) {
     const newUser = await createUserAccount(values);
+    if(!newUser) return;
     console.log(newUser);
   }
 
@@ -34,7 +35,7 @@ const SignupForm = () => {
         <img src="/assets/images/logo.svg" alt="logo" />
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-5">Create a new account</h2>
         <p className="text-light-3 small-medium md:base-regular">To use SnapGram, please enter your account details</p>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3 w-full mt-4">
           <FormField
             control={form.control}
             name="name"
