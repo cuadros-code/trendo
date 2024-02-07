@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { SingupValidation } from "@/lib/validation"
@@ -9,13 +9,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import Loader from "@/components/shared/Loader"
 import { useToast } from "@/components/ui/use-toast"
 import { useCreateUserAccountMutation, useSignAccountMutation } from "@/lib/react-query/queriesAndMutations"
+import { useUserContext } from "@/context/AuthContext"
 
 const SignupForm = () => {
 
   const { toast } = useToast();
   const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccountMutation();
   const { mutateAsync: signInAccount, isPending: isSignIn } = useSignAccountMutation();
-
+  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof SingupValidation>>({
     resolver: zodResolver(SingupValidation),
@@ -30,10 +32,7 @@ const SignupForm = () => {
   async function onSubmit(values: z.infer<typeof SingupValidation>) {
     const newUser = await createUserAccount(values);
     if(!newUser) {
-      toast({
-        title: "Signup failed. Please try again later.",
-        variant: "destructive"
-      })
+      return toast({ title: "Signup failed. Please try again later." })
     };
 
     const swession = await signInAccount({ 
@@ -42,10 +41,16 @@ const SignupForm = () => {
     });
 
     if(!swession) {
-      toast({
-        title: "Signin failed. Please try again later.",
-        variant: "destructive"
-      })
+      return toast({ title: "Signin failed. Please try again later.",})
+    }
+
+    const isLoggedIn = await checkAuthUser();
+
+    if(isLoggedIn) {
+      form.reset();
+      navigate('/');
+    } else {
+      return toast({ title: "Signin failed. Please try again later."})
     }
 
   }
