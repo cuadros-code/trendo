@@ -32,9 +32,6 @@ const SigninForm = () => {
       password: values.password 
     });
 
-    console.log(session);
-    
-
     if(!session) {
       return toast({ title: "Signin failed. Please try again later.",})
     }
