@@ -83,3 +83,13 @@ export async function getCurrentAccount() {
   }
 }
 
+export async function signOutAccount() {
+  try {
+    const session = await account.deleteSession('current');
+    return session;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+

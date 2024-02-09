@@ -1,8 +1,39 @@
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
+import { useSignOurAccountMutation } from "@/lib/react-query/queriesAndMutations";
+import { useEffect } from "react";
+
 const Topbar = () => {
+
+  const navigate = useNavigate()
+  const { mutate: signOut, isSuccess } =  useSignOurAccountMutation()
+
+  useEffect(() => {
+    if(isSuccess) {
+      navigate(0)
+    }
+  }, [isSuccess])
+
   return ( 
-    <div>
-      
-    </div>
+    <section className="topbar">
+      <div className="flex-between py-4 px-5">
+        <Link to="/" className="flex gap-3 items-center">
+          <img 
+            src="/assets/images/logo.svg" 
+            alt="logo app" 
+            width={130}
+            height={325}
+          />
+        </Link>
+
+        <div className="flex gap-4">
+          <Button variant="ghost" className="shad-button-ghost" onClick={() => signOut()}>
+            <img src="/assets/icons/logout.svg" alt="logout" />
+          </Button>
+        </div>
+
+      </div>
+    </section>
   );
 }
  
