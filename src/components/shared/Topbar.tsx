@@ -6,7 +6,7 @@ import { useEffect } from "react";
 const Topbar = () => {
 
   const navigate = useNavigate()
-  const { mutate: signOut, isSuccess } =  useSignOurAccountMutation()
+  const { mutate: signOut, isSuccess, isPending } =  useSignOurAccountMutation()
 
   useEffect(() => {
     if(isSuccess) {
@@ -27,7 +27,12 @@ const Topbar = () => {
         </Link>
 
         <div className="flex gap-4">
-          <Button variant="ghost" className="shad-button-ghost" onClick={() => signOut()}>
+          <Button 
+            disabled={isPending}
+            variant="ghost" 
+            className="shad-button-ghost" 
+            onClick={() => signOut()}
+          >
             <img src="/assets/icons/logout.svg" alt="logout" />
           </Button>
         </div>
