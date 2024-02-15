@@ -2,11 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useSignOurAccountMutation } from "@/lib/react-query/queriesAndMutations";
 import { useEffect } from "react";
+import { useUserContext } from "@/context/AuthContext";
 
 const Topbar = () => {
 
   const navigate = useNavigate()
   const { mutate: signOut, isSuccess, isPending } =  useSignOurAccountMutation()
+  const { user } = useUserContext()
 
   useEffect(() => {
     if(isSuccess) {
@@ -35,6 +37,15 @@ const Topbar = () => {
           >
             <img src="/assets/icons/logout.svg" alt="logout" />
           </Button>
+          <Link to={`/profile/${user.id}`} className="flex-center gap-3">
+            <img 
+              src={user.imageUrl || '/assets/images/profile-placeholder.svg'}
+              alt="avatar" 
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+          </Link>
         </div>
 
       </div>
