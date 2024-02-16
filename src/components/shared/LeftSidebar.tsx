@@ -1,11 +1,13 @@
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { sidebarLinks } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
 import { useSignOurAccountMutation } from "@/lib/react-query/queriesAndMutations";
 import { useEffect } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
 
 const LeftSidebar = () => {
 
+  const { pathname } = useLocation()
   const navigate = useNavigate()
   const { mutate: signOut, isSuccess, isPending } =  useSignOurAccountMutation()
   const { user } = useUserContext()  
@@ -44,25 +46,43 @@ const LeftSidebar = () => {
 
         <ul className="flex flex-col gap-6">
           {
-            sidebarLinks.map((link, index) => (
-              <li className="leftsidebar-link" key={index}>
-                <NavLink
-                  to={link.route}
-                  className="flex gap-4 items-center p-4"
+            sidebarLinks.map((link, index) => {
+              
+              const isActive = pathname === link.route
+
+              return (
+                <li 
+                  key={index}
+                  className={`leftsidebar-link group ${isActive && 'bg-primary-500'}`}
                 >
-                  <img 
-                    src={link.imgURL} 
-                    alt={link.label}
-                    className="group-hover:filter-white"
-                  />
-                  {link.label}
-                </NavLink>
-              </li>
-            ))
+                  <NavLink
+                    to={link.route}
+                    className="flex gap-4 items-center p-4"
+                  >
+                    <img 
+                      src={link.imgURL} 
+                      alt={link.label}
+                      className={`group-hover:invert-white ${isActive && 'invert-white' }`}
+                    />
+                    {link.label}
+                  </NavLink>
+                </li>
+              )
+            })
           }
         </ul>
-
       </div>
+
+      <Button 
+        disabled={isPending}
+        variant="ghost" 
+        className="shad-button_ghost" 
+        onClick={() => signOut()}
+      >
+        <img src="/assets/icons/logout.svg" alt="logout" />
+        <p className="small-medium lg:base-medium" >Logout</p>
+      </Button>
+
     </nav>
   );
 }
