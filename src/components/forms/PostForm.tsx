@@ -30,7 +30,7 @@ const formSchema = z.object({
 })
  
 
-const PostForm = () => {
+const PostForm = ({ post }: any) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,13 +56,12 @@ const PostForm = () => {
             <FormItem>
               <FormLabel className="shad-form_label">Caption</FormLabel>
               <FormControl>
-                <Textarea className="shad-textarea custom-scrollbar" placeholder="shadcn" {...field} />
+                <Textarea className="shad-textarea custom-scrollbar" placeholder="Add caption" {...field} />
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="file"
@@ -70,13 +69,15 @@ const PostForm = () => {
             <FormItem>
               <FormLabel className="shad-form_label">Add Photos</FormLabel>
               <FormControl>
-                <FileUploader />
+                <FileUploader
+                  fieldChange={field.onChange}
+                  mediaUrl={post?.mediaUrl}
+                />
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="location"
@@ -110,7 +111,6 @@ const PostForm = () => {
             </FormItem>
           )}
         />
-
         <div className="flex gap-4 items-center justify-end">
           <Button type="button" className="shad-button_dark_4">Cancel</Button>
           <Button type="submit" className="shad-button_primary whitespace-nowrap">Submit</Button>
