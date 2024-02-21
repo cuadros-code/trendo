@@ -16,16 +16,16 @@ import FileUploader from "../shared/FileUploader"
 
 const formSchema = z.object({
   caption: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: "Add a caption.",
+  }),
+  file: z.string().min(2, {
+    message: "A file is required.",
   }),
   tags: z.string().min(2, {
     message: "Tags must be at least 2 characters.",
   }),
   location: z.string().min(2, {
     message: "Location must be at least 2 characters.",
-  }),
-  file: z.string().min(2, {
-    message: "File must be at least 2 characters.",
   }),
 })
  
