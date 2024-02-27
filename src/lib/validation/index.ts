@@ -13,3 +13,10 @@ export const SinginValidation = z.object({
   password: z.string().min(6, { message: "Password is too short" }),
 })
 
+
+export const PostValidation = z.object({
+  caption: z.string().min(5).max(2200),
+  file: z.custom<File[]>(),
+  location: z.string().min(2).max(100),
+  tags: z.string()
+})

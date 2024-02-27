@@ -13,34 +13,47 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "../ui/textarea"
 import FileUploader from "../shared/FileUploader"
+import { PostValidation } from "@/lib/validation"
+import { Models } from "appwrite"
+import { useUserContext } from "@/context/AuthContext"
+import { useToast } from "../ui/use-toast"
+import { useNavigate } from "react-router-dom"
 
-const formSchema = z.object({
-  caption: z.string().min(2, {
-    message: "Add a caption.",
-  }),
-  file: z.string().min(2, {
-    message: "A file is required.",
-  }),
-  tags: z.string().min(2, {
-    message: "Tags must be at least 2 characters.",
-  }),
-  location: z.string().min(2, {
-    message: "Location must be at least 2 characters.",
-  }),
-})
+type PostFormProps = {
+  post?: Models.Document
+}
  
 
-const PostForm = ({ post }: any) => {
+const PostForm = ({ post }: PostFormProps) => {
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  // const { mutateAsync: createPost, isPending: isLoadingCreate } = useCreatePost()
+  const { user } = useUserContext()
+  const { toast } = useToast()
+  const navigate = useNavigate()
+
+  const form = useForm<z.infer<typeof PostValidation>>({
+    resolver: zodResolver(PostValidation),
     defaultValues: {
-      caption: "",
+      caption: post ? post.caption : "",
+      file: [],
+      location: post ? post.location : "",
+      tags: post ? post.tags.join(',') : "",
     },
   })
  
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof PostValidation>) {
+
+    // const newPost = await createPost({
+    //   ...values,
+    //   userId: user?.id,
+    // })
+
+    // if(!newPost){
+    //   toast({
+    //     title: "Please try again later",
+    //   })
+    // }
+    // navigate(`/`)
   }
 
   return (
