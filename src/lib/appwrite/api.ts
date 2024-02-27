@@ -107,7 +107,28 @@ export async function createPost(post: INewPost){
       throw Error
     };
 
-    const tags = post.tags?.replace
+    const tags = post.tags?.replace(/ /g,'').split(',') || [];
+    
+    const newPost = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      ID.unique(),
+      {
+        creator: post.userId,
+        caption: post.caption,
+        imageUrl: fileUrl,
+        imageId: uploadedFile.$id,
+        location: post.location,
+        tags: tags,
+      }
+    )
+
+    if(!newPost) {
+      deleteFile(uploadedFile.$id);
+      throw Error;
+    };
+
+    return newPost;
     
   } catch (error) {
     console.log(error);
